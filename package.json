@@ -1,22 +1,12 @@
 {
-  "name": "lithium-js-server",
+  "name": "sunlit-browser",
   "version": "1.0.0",
-  "description": "Static file server for lithium-js applications",
+  "description": "Sunlit Browser with lithium-js",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server.js"
   },
-  "keywords": [
-    "static-server",
-    "lithium-js",
-    "nodejs"
-  ],
-  "author": "",
-  "license": "ISC",
   "engines": {
-    "node": ">=20.0.0"
-  },
-  "dependencies": {},
-  "devDependencies": {}
+    "node": ">=18.0.0"
+  }
 }
