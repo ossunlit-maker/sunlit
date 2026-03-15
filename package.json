@@ -1,0 +1,22 @@
+{
+  "name": "lithium-js-server",
+  "version": "1.0.0",
+  "description": "Static file server for lithium-js applications",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "static-server",
+    "lithium-js",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
