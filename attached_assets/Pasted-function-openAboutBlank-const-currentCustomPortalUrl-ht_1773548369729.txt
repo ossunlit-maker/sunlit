@@ -1,0 +1,55 @@
+function openAboutBlank() {
+    const currentCustomPortalUrl = 'https://clever.com/';
+    const statusDiv = document.getElementById('sequenceStatus');
+    const statusSpan = document.getElementById('sequenceStep');
+    
+    if (statusDiv) statusDiv.classList.add('show');
+    if (statusSpan) statusSpan.textContent = 'Opening portal (1/4)';
+    
+    const portalTab = window.open(currentCustomPortalUrl, '_blank');
+    
+    if (portalTab) {
+        setTimeout(() => {
+            if (statusSpan) statusSpan.textContent = 'Closing portal (2/4)';
+            try {
+                portalTab.close();
+            } catch (e) {
+                console.log('Could not close tab automatically');
+            }
+            
+            setTimeout(() => {
+                if (statusSpan) statusSpan.textContent = 'Reopening portal (3/4)';
+                const reopenedPortal = window.open(currentCustomPortalUrl, '_blank');
+                
+                setTimeout(() => {
+                    if (statusSpan) statusSpan.textContent = 'Loading game (4/4)';
+                    const gameTab = window.open('about:blank', '_blank');
+                    if (gameTab) {
+                        gameTab.document.open();
+                        // Added scrolling="no" and overflow:hidden to prevent scrolling
+                        gameTab.document.write('<!DOCTYPE html><html><head><title>CoreOS</title><style>body{margin:0;height:100vh;overflow:hidden;}</style></head><body><iframe src="https://coreos.top/" scrolling="no" style="width:100%;height:100%;border:none;overflow:hidden;"></iframe></body></html>');
+                        gameTab.document.close();
+                        
+                        setTimeout(() => {
+                            if (statusDiv) statusDiv.classList.remove('show');
+                        }, 2000);
+                    }
+                }, 2000);
+            }, 500);
+        }, 500);
+    } else {
+        if (statusSpan) statusSpan.textContent = 'Popup blocked - using fallback';
+        alert('Please allow popups for this site to use bypass mode');
+        
+        setTimeout(() => {
+            const gameTab = window.open('about:blank', '_blank');
+            if (gameTab) {
+                gameTab.document.open();
+                // Added scrolling="no" and overflow:hidden here too
+                gameTab.document.write('<!DOCTYPE html><html><head><title>CoreOS</title><style>body{margin:0;height:100vh;overflow:hidden;}</style></head><body><iframe src="https://coreos.top/" scrolling="no" style="width:100%;height:100%;border:none;overflow:hidden;"></iframe></body></html>');
+                gameTab.document.close();
+            }
+            if (statusDiv) statusDiv.classList.remove('show');
+        }, 100);
+    }
+}
