@@ -2,7 +2,8 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
-const PORT = 5000;
+// Railway provides the port via environment variable
+const PORT = process.env.PORT || 5000;
 const HOST = "0.0.0.0";
 
 const mimeTypes = {
@@ -23,17 +24,15 @@ const server = http.createServer((req, res) => {
   let urlPath = req.url.split("?")[0];
   if (urlPath === "/") urlPath = "/index.html";
 
-  // Remove leading slash for file system paths
+  // Remove leading slash
   const cleanPath = urlPath.startsWith("/") ? urlPath.slice(1) : urlPath;
   
   // Try root directory first
   const rootAttempt = path.join(__dirname, cleanPath);
   
-  // If the path starts with "lithium-js/", try looking in the lithium-js directory
-  // without duplicating the lithium-js folder name
+  // Handle lithium-js paths correctly
   let lithiumAttempt = null;
   if (cleanPath.startsWith("lithium-js/")) {
-    // Remove "lithium-js/" prefix and look in lithium-js directory
     const subPath = cleanPath.slice("lithium-js/".length);
     lithiumAttempt = path.join(__dirname, "lithium-js", subPath);
   }
@@ -41,44 +40,38 @@ const server = http.createServer((req, res) => {
   function serveFile(filePath) {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = mimeTypes[ext] || "application/octet-stream";
-    console.log(`Serving: ${filePath} (${contentType})`);
+    console.log(`Serving: ${filePath}`);
     res.writeHead(200, { "Content-Type": contentType });
     fs.createReadStream(filePath).pipe(res);
   }
 
-  // Check root attempt
   if (fs.existsSync(rootAttempt) && fs.statSync(rootAttempt).isFile()) {
     serveFile(rootAttempt);
-  } 
-  // Check lithium attempt if it exists
-  else if (lithiumAttempt && fs.existsSync(lithiumAttempt) && fs.statSync(lithiumAttempt).isFile()) {
+  } else if (lithiumAttempt && fs.existsSync(lithiumAttempt) && fs.statSync(lithiumAttempt).isFile()) {
     serveFile(lithiumAttempt);
-  } 
-  // File not found
-  else {
-    console.log(`Not found: ${urlPath} (tried root: ${rootAttempt}${lithiumAttempt ? ', lithium: ' + lithiumAttempt : ''})`);
+  } else {
+    console.log(`Not found: ${urlPath}`);
     res.writeHead(404, { "Content-Type": "text/plain" });
     res.end("Not found: " + urlPath);
   }
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`Server running at http://${HOST}:${PORT}`);
-  console.log(`Serving files from: ${__dirname}`);
+  console.log(`✅ Server running at http://${HOST}:${PORT}`);
+  console.log(`📁 Serving files from: ${__dirname}`);
+  console.log(`🔍 Check if lithium-js exists:`);
   
-  // Check if lithium-js directory exists
   const lithiumPath = path.join(__dirname, "lithium-js");
   if (fs.existsSync(lithiumPath)) {
-    console.log(`✅ lithium-js directory found`);
+    console.log(`   ✅ lithium-js/ directory found`);
     
-    // Check for scramjet file
     const scramjetPath = path.join(lithiumPath, "scram", "scramjet.all.js");
     if (fs.existsSync(scramjetPath)) {
-      console.log(`✅ scramjet.all.js found at: ${scramjetPath}`);
+      console.log(`   ✅ scramjet.all.js found`);
     } else {
-      console.log(`❌ scramjet.all.js NOT found at: ${scramjetPath}`);
+      console.log(`   ❌ scramjet.all.js NOT found at: ${scramjetPath}`);
     }
   } else {
-    console.log(`❌ lithium-js directory NOT found at: ${lithiumPath}`);
+    console.log(`   ❌ lithium-js/ directory NOT found at: ${lithiumPath}`);
   }
 });
