@@ -1,8 +1,7 @@
-# lithium-js
-A clean framework for creating web-proxies with just 3 files3 files3 files
+# Sunlit Browser
 
 # Usage
 > [!IMPORTANT]  
-> You need to move the contents of `/lithium-js`  to your root folder (due to scope issues)
+> This is a [LITHIUM](https://github.com/Coding4Hours/lithium/tree/main/lithium-js) Remix.
 
-See `index.html`.
+All credits go to [Coding4Hours](https://github.com/Coding4Hours) for making it, I just changed the ui all the main logic and help is from him
